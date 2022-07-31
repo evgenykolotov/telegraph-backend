@@ -1,0 +1,26 @@
+name: Deploy source code
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: Copy files on server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOSTNAME }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          rm: true
+          source: "./*"
+          target: "~/telegraph-backend"
