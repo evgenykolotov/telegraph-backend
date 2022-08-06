@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.development
+    env_file:
+      - environment/.development.env
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    restart: always
+
+volumes:
+  pgdata:

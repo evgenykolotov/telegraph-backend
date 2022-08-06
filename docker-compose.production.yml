@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.production
+    env_file:
+      - environment/.production.env
+    ports:
+      - 5000:5000
+    command: npm run start:prod
+    restart: always

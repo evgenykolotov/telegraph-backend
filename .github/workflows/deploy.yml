@@ -24,3 +24,13 @@ jobs:
           rm: true
           source: "./*"
           target: "~/telegraph-backend"
+      - name: Executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOSTNAME }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd $HOME/telegraph-backend
+            docker-compose -f docker-compose.production.yml up -d --build
