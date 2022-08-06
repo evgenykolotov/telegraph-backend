@@ -1,7 +1,7 @@
 {
   "name": "telegraph-backend",
-  "version": "0.0.1",
-  "description": "Backend for Telegraph",
+  "version": "0.0.2",
+  "description": "Backend for Telegraph application",
   "author": {
     "name": "Evgeny Kolotov",
     "email": "evgenykolotov.it@gmail.com"

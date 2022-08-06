@@ -1,11 +1,9 @@
 name: Deploy source code
 
 on:
-  push:
-    branches: [develop]
-  # pull_request:
-  #   branches: [main]
-  #   types: [closed]
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 jobs:
   deploy:
@@ -33,4 +31,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: whoami
+          script: |
+            cd $HOME/telegraph-backend
+            docker-compose -f docker-compose.production.yml up -d --build
