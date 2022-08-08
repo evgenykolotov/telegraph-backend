@@ -10,5 +10,28 @@ services:
       - environment/.production.env
     ports:
       - 5000:5000
+    depends_on:
+      - postgres
+    networks:
+      - backend_prod
     command: npm run start:prod
     restart: always
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    env_file:
+      - environment/.production.env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_prod
+    restart: always
+
+networks:
+  backend_prod:
+    name: cloud_drive_network
