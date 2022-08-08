@@ -32,6 +32,9 @@ services:
       - backend_prod
     restart: always
 
+volumes:
+  pgdata:
+
 networks:
   backend_prod:
     name: cloud_drive_network
