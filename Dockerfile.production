@@ -2,5 +2,5 @@ FROM node:16.13.0-alpine
 WORKDIR /app
 COPY . .
 COPY prisma ./prisma/
-RUN npm ci && npm run build
+RUN npm ci && npx prisma generate && npm run build
 CMD ["npm", "run", "start:prod"]
