@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { IsEmail, IsNotEmpty, Length } from 'class-validator';
-import { VALIDATION_MASSAGES } from 'src/types/validation-messages.enums';
+import { VALIDATION_MASSAGES } from 'src/types/validation-messages.enum';
 
 /**
  * @class
@@ -15,18 +16,18 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'example@email.com', description: 'Почтовый адрес' })
   @IsEmail({}, { message: VALIDATION_MASSAGES.NOT_EMAIL })
   @IsNotEmpty({ message: VALIDATION_MASSAGES.EMPTY_EMAIL })
-  public readonly email: string;
+  public readonly email: User['email'];
 
   @ApiProperty({ example: '12345678', description: 'Пароль пользователя' })
   @IsNotEmpty({ message: VALIDATION_MASSAGES.EMPTY_PASSWORD })
   @Length(4, 24, { message: VALIDATION_MASSAGES.LENGTH_PASSWORD })
-  public readonly password: string;
+  public readonly password: User['password'];
 
   @ApiProperty({ example: 'Евгений', description: 'Имя пользователя' })
   @IsNotEmpty({ message: VALIDATION_MASSAGES.EMPTY_FIRST_NAME })
-  public readonly firstName: string;
+  public readonly firstName: User['first_name'];
 
   @ApiProperty({ example: 'Колотов', description: 'Фамилия пользователя' })
   @IsNotEmpty({ message: VALIDATION_MASSAGES.EMPTY_LAST_NAME })
-  public readonly lastName: string;
+  public readonly lastName: User['last_name'];
 }
