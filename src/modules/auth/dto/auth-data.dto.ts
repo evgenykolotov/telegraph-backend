@@ -1,5 +1,8 @@
+import { JwtService } from '@nestjs/jwt';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
+import { JSONWebTokenService } from '../services/jsonwebtoken.service';
 
 /**
  * @class
@@ -10,6 +13,8 @@ import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
  * @property {string} refresh_token -Refresh токен.
  */
 export class AuthDataDTO {
+  private static jwtService = new JSONWebTokenService(new JwtService());
+
   @ApiProperty({ type: UserInfoDTO, description: 'Информация о пользователе' })
   public readonly user: UserInfoDTO;
 
@@ -18,4 +23,10 @@ export class AuthDataDTO {
 
   @ApiProperty({ example: '', description: 'Refresh токен' })
   public readonly refresh_token: string;
+
+  constructor(user: User) {
+    this.user = new UserInfoDTO(user);
+    this.access_token = AuthDataDTO.jwtService.createAccessToken(this.user);
+    this.refresh_token = AuthDataDTO.jwtService.createRefreshToken(this.user);
+  }
 }
