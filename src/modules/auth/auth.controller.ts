@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Req,
   Res,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,10 +15,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { AuthDataDTO } from './dto/auth-data.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
+import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
 import { AuthService } from './services/auth.service';
 
 /**
@@ -87,5 +91,24 @@ export class AuthController {
       httpOnly: true,
     });
     return responseData;
+  }
+
+  /**
+   * Обработчик маршрута на сброс сессии.
+   * @public
+   * @param {Request} request - Объект запроса.
+   * @param {Response} response - Объект ответа.
+   * @returns {number}
+   */
+  @ApiOperation({ summary: 'Сброс сессии пользователя' })
+  @ApiOkResponse({ description: 'Сессия пользователя сброшена' })
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('/logout')
+  public async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
+    const { refresh_token } = request.cookies;
+    response.clearCookie('refresh_token', refresh_token);
   }
 }
