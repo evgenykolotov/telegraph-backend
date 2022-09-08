@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDTO } from 'src/modules/users/dto/create-user.dto';
@@ -9,6 +10,7 @@ import { UsersService } from 'src/modules/users/services/users.service';
 import { EXCEPTION_MESSAGES } from 'src/types/exception-messages.enum';
 import { AuthDataDTO } from '../dto/auth-data.dto';
 import { LoginUserDTO } from '../dto/login-user.dto';
+import { JSONWebTokenService } from './jsonwebtoken.service';
 
 /**
  * @class
@@ -20,8 +22,12 @@ export class AuthService {
   /**
    * @constructor
    * @param {UsersService} usersService - Сервис для работы с пользователями.
+   * @param {JSONWebTokenService} jsonwebtokenService - Сервис для работы с jsonwebtoken в приложении.
    */
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jsonwebtokenService: JSONWebTokenService,
+  ) {}
 
   /**
    * Регистрация нового пользователя в приложении.
@@ -61,6 +67,22 @@ export class AuthService {
     const isPassEquals = await bcrypt.compare(dto.password, user.password);
     if (!isPassEquals)
       throw new BadRequestException(EXCEPTION_MESSAGES.WRONG_AUTH_DATA);
+
+    return new AuthDataDTO(user);
+  }
+
+  /**
+   * Обновление токенов по действующему refresh токену.
+   * @public
+   * @param {string} token - Текущий активный refresh токен.
+   * @throws {UnauthorizedException} - Пользователь не авторизован.
+   * @returns {AuthDataDTO} - Информация по авторизации.
+   */
+  public async refresh(token: string): Promise<AuthDataDTO> {
+    const userData = this.jsonwebtokenService.verifyRefreshToken(token);
+    const user = await this.usersService.findUniqueById(userData.id);
+    if (!userData || !user)
+      throw new UnauthorizedException(EXCEPTION_MESSAGES.UNAUTHORIZED);
 
     return new AuthDataDTO(user);
   }

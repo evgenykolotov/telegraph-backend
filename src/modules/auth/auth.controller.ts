@@ -111,4 +111,29 @@ export class AuthController {
     const { refresh_token } = request.cookies;
     response.clearCookie('refresh_token', refresh_token);
   }
+
+  /**
+   * Обработчик маршрута на обновление токенов.
+   * @param {Request} request - Объект запроса.
+   * @param {Response} response - Объект ответа.
+   * @returns {AuthDataDTO} - Новые токены.
+   */
+  @ApiOperation({ summary: 'Обновление токенов' })
+  @ApiCreatedResponse({
+    type: AuthDataDTO,
+    description: 'Токены успешно обновлены',
+  })
+  @Get('/refresh')
+  public async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<AuthDataDTO> {
+    const { refresh_token } = request.cookies;
+    const responseData = await this.authService.refresh(refresh_token);
+    response.cookie('refreshToken', responseData.refresh_token, {
+      maxAge: AuthController.cookieMaxAge,
+      httpOnly: true,
+    });
+    return responseData;
+  }
 }
