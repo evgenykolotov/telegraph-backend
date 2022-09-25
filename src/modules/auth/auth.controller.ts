@@ -1,26 +1,26 @@
 import {
-  Body,
-  Controller,
   Get,
-  Post,
-  Req,
   Res,
-  UseGuards,
+  Req,
+  Body,
+  Post,
   UsePipes,
+  UseGuards,
+  Controller,
   ValidationPipe,
 } from '@nestjs/common';
 import {
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiOperation,
   ApiTags,
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
 } from '@nestjs/swagger';
 import { Response, Request } from 'express';
-import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { AuthDataDTO } from './dto/auth-data.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
-import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
 import { AuthService } from './services/auth.service';
+import { CreateUserDTO } from '../users/dto/create-user.dto';
+import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
 
 /**
  * @class

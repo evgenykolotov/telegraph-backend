@@ -1,6 +1,6 @@
+import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
 import { JSONWebTokenService } from '../services/jsonwebtoken.service';
 

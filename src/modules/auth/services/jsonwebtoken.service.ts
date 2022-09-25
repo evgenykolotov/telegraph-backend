@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
 
 /**
