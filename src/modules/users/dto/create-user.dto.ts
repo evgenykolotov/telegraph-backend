@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 import { VALIDATION_MASSAGES } from 'src/types/validation-messages.enum';
 

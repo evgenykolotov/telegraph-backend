@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './services/auth.service';
 import { AuthController } from './auth.controller';
+import { UsersModule } from '../users/users.module';
+import { AuthService } from './services/auth.service';
 import { JSONWebTokenService } from './services/jsonwebtoken.service';
 
+/**
+ * @class
+ * @name AuthorizationModule
+ * @classdesc Модуль для авторизации в приложении.
+ */
 @Module({
   imports: [UsersModule, JwtModule.register({})],
   controllers: [AuthController],

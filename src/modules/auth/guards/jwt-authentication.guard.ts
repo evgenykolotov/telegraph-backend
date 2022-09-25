@@ -1,13 +1,13 @@
 import {
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { RequestWithUser } from 'src/types/application.types';
 import { EXCEPTION_MESSAGES } from 'src/types/exception-messages.enum';
 import { JSONWebTokenService } from '../services/jsonwebtoken.service';
-import { RequestWithUser } from 'src/types/application.types';
 
 type CanActivateReturn = boolean | Promise<boolean> | Observable<boolean>;
 

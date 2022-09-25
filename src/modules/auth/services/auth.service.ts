@@ -1,16 +1,16 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
+  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { CreateUserDTO } from 'src/modules/users/dto/create-user.dto';
-import { UsersService } from 'src/modules/users/services/users.service';
-import { EXCEPTION_MESSAGES } from 'src/types/exception-messages.enum';
 import { AuthDataDTO } from '../dto/auth-data.dto';
 import { LoginUserDTO } from '../dto/login-user.dto';
 import { JSONWebTokenService } from './jsonwebtoken.service';
+import { CreateUserDTO } from 'src/modules/users/dto/create-user.dto';
+import { EXCEPTION_MESSAGES } from 'src/types/exception-messages.enum';
+import { UsersService } from 'src/modules/users/services/users.service';
 
 /**
  * @class
