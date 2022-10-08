@@ -4,14 +4,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
 import { JSONWebTokenService } from '../services/jsonwebtoken.service';
 
-/**
- * @class
- * @name AuthDataDTO
- * @classdesc DTO с данными об авторизации.
- * @property {UserInfoDTO} user - Полезная информация о пользователе.
- * @property {string} access_token - Access токен.
- * @property {string} refresh_token -Refresh токен.
- */
 export class AuthDataDTO {
   private static jwtService = new JSONWebTokenService(new JwtService());
 
