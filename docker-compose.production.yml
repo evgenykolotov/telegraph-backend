@@ -50,6 +50,7 @@ services:
 
 volumes:
   pgdata:
+  minio-storage:
 
 networks:
   backend_prod:
