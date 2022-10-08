@@ -22,32 +22,13 @@ import { AuthService } from './services/auth.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
 
-/**
- * @class
- * @name AuthController
- * @classdesc Контроллер для маршрутов авторизации.
- */
 @ApiTags('Авторизация')
 @Controller('api/auth')
 export class AuthController {
-  /**
-   * @property - Максимальный срок жизни cookie.
-   */
   private static readonly cookieMaxAge: number = 30 * 24 * 60 * 60 * 1000;
 
-  /**
-   * @constructor
-   * @param {AuthService} authService - Сервис для работы с авторизацией и аутентификацией пользователей.
-   */
   constructor(private readonly authService: AuthService) {}
 
-  /**
-   * Обработчик маршрута для регистрации пользователя.
-   * @public
-   * @param {Response} response - Объект ответа.
-   * @param {CreateUserDTO} userDto - Тело запроса на создание пользователя.
-   * @returns {AuthDataDTO} - Данные с авторизацией пользователя.
-   */
   @ApiOperation({ summary: 'Регистрация пользователя' })
   @ApiCreatedResponse({
     type: AuthDataDTO,
@@ -67,13 +48,6 @@ export class AuthController {
     return responseData;
   }
 
-  /**
-   * Обработчик маршрута для авторизации пользователя.
-   * @public
-   * @param {Response} response - Объект ответа.
-   * @param {LoginUserDTO} userDto - Тело запроса на авторизацию пользователя.
-   * @returns {AuthDataDTO} - Данные с авторизацией пользователя.
-   */
   @ApiOperation({ summary: 'Авторизация пользователя' })
   @ApiOkResponse({
     type: AuthDataDTO,
@@ -93,13 +67,6 @@ export class AuthController {
     return responseData;
   }
 
-  /**
-   * Обработчик маршрута на сброс сессии.
-   * @public
-   * @param {Request} request - Объект запроса.
-   * @param {Response} response - Объект ответа.
-   * @returns {number}
-   */
   @ApiOperation({ summary: 'Сброс сессии пользователя' })
   @ApiOkResponse({ description: 'Сессия пользователя сброшена' })
   @UseGuards(JwtAuthenticationGuard)
@@ -112,12 +79,6 @@ export class AuthController {
     response.clearCookie('refresh_token', refresh_token);
   }
 
-  /**
-   * Обработчик маршрута на обновление токенов.
-   * @param {Request} request - Объект запроса.
-   * @param {Response} response - Объект ответа.
-   * @returns {AuthDataDTO} - Новые токены.
-   */
   @ApiOperation({ summary: 'Обновление токенов' })
   @ApiCreatedResponse({
     type: AuthDataDTO,

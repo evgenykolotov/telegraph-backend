@@ -1,75 +1,40 @@
 import { JwtService } from '@nestjs/jwt';
+import { EXPIRES_IN } from 'src/types/application.types';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserInfoDTO } from 'src/modules/users/dto/user-info.dto';
+import { EXCEPTION_MESSAGES } from 'src/types/exception-messages.enum';
 
-/**
- * @class
- * @name JSONWebTokenService
- * @classdesc Сервис для работы с jsonwebtoken в приложении.
- */
 @Injectable()
 export class JSONWebTokenService {
-  /**
-   * @constructor
-   * @param {JwtService} jwtService - Сервис, поставляемый JWT модулем.
-   */
   constructor(private readonly jwtService: JwtService) {}
 
-  /**
-   * Создание Access токена с данными о пользователе.
-   * @public
-   * @param {UserInfoDTO} payload - Информация о пользователе, которая ляжет в токен.
-   * @returns {string} - Строка с access токеном.
-   */
   public createAccessToken(payload: UserInfoDTO): string {
     return this.jwtService.sign(
       { ...payload },
-      { secret: process.env.JWT_ACCESS_KEY, expiresIn: '1h' },
+      { secret: process.env.JWT_ACCESS_KEY, expiresIn: EXPIRES_IN.ONE_HOUR },
     );
   }
 
-  /**
-   * Создание Refresh токена с данными о пользователе.
-   * @public
-   * @param {UserInfoDTO} payload - Информация о пользователе, которая ляжет в токен.
-   * @returns {string} - Строка с refresh токеном.
-   */
   public createRefreshToken(payload: UserInfoDTO): string {
     return this.jwtService.sign(
       { ...payload },
-      { secret: process.env.JWT_REFRESH_KEY, expiresIn: '30d' },
+      { secret: process.env.JWT_REFRESH_KEY, expiresIn: EXPIRES_IN.THIRTY_DAY },
     );
   }
 
-  /**
-   * Верификация Access токена.
-   * @public
-   * @param {string} token - access токен для верификации.
-   * @returns {UserInfoDTO} - Информация о пользователе из токена.
-   */
   public verifyAccessToken(token: string): UserInfoDTO {
-    try {
-      return this.jwtService.verify<UserInfoDTO>(token, {
-        secret: process.env.JWT_ACCESS_KEY,
-      });
-    } catch (error) {
-      throw new BadRequestException('Access токен не валидный');
-    }
+    return this.verifyToken(token, process.env.JWT_ACCESS_KEY);
   }
 
-  /**
-   * Верификация Refresh токена.
-   * @public
-   * @param {string} token - refresh токен для верификации.
-   * @returns {UserInfoDTO} - Информация о пользователе из токена.
-   */
   public verifyRefreshToken(token: string): UserInfoDTO {
+    return this.verifyToken(token, process.env.JWT_REFRESH_KEY);
+  }
+
+  private verifyToken(token: string, secret: string): UserInfoDTO {
     try {
-      return this.jwtService.verify<UserInfoDTO>(token, {
-        secret: process.env.JWT_REFRESH_KEY,
-      });
+      return this.jwtService.verify<UserInfoDTO>(token, { secret });
     } catch (error) {
-      throw new BadRequestException('Refresh токен не валидный');
+      throw new BadRequestException(EXCEPTION_MESSAGES.TOKEN_INVALID);
     }
   }
 }

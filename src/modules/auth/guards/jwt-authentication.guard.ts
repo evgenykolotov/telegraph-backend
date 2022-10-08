@@ -11,36 +11,15 @@ import { JSONWebTokenService } from '../services/jsonwebtoken.service';
 
 type CanActivateReturn = boolean | Promise<boolean> | Observable<boolean>;
 
-/**
- * @class
- * @name AuthorizationGuard
- * @implements {CanActivate}
- * @classdesc Сервис для авторизации доступа к маршрутам.
- */
 @Injectable()
 export default class JwtAuthenticationGuard implements CanActivate {
-  /**
-   * @constructor
-   * @param {JSONWebTokenService} jsonwebtokenservice - Сервис для работы с jsonwebtoken в приложении.
-   */
   constructor(private readonly jsonwebtokenservice: JSONWebTokenService) {}
 
-  /**
-   * Метод реализующий интерфейс CanActivate.
-   * @param {ExecutionContext} context - Контекст запроса.
-   * @returns {CanActivateReturn}
-   */
   public canActivate(context: ExecutionContext): CanActivateReturn {
     const request = context.switchToHttp().getRequest();
     return this.validateRequest(request);
   }
 
-  /**
-   * Метод верификации запроса пользователя.
-   * @param {Request} request - Запрос к API.
-   * @throws {UnauthorizedException} - Пользователь не авторизован.
-   * @returns {CanActivateReturn}
-   */
   private validateRequest(request: RequestWithUser): CanActivateReturn {
     try {
       const authorizationHeader = request.headers.authorization;

@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Telegraph Backend')
     .setDescription('REST API for Telegraph application')
-    .setVersion('0.1.1')
+    .setVersion('0.1.2')
     .addBearerAuth(
       {
         type: 'http',

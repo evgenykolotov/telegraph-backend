@@ -1,38 +1,27 @@
-import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
+import { validate, ValidationError } from 'class-validator';
 import { ValidationException } from '../exceptions/validation.exception';
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 
-/**
- * @class
- * @name ValidationPipe
- * @implements {PipeTransform}
- * @classdesc Класс для вывода динамических ошибок при валидации.
- */
 @Injectable()
 export class ValidationPipe implements PipeTransform {
-  /**
-   * Метод реализующий интерфейс валидации.
-   * @public
-   * @param {any} value - Значение для проверки.
-   * @param {ArgumentMetadata} metadata - Метаинформация для валидации.
-   * @throws {ValidationException} - Динамическое сообщение об ошибке.
-   * @returns {any} - Валидируемое сообщение.
-   */
-  public async transform(
-    value: any,
-    metadata: ArgumentMetadata,
-  ): Promise<void> {
-    const obj = plainToClass(metadata.metatype, value);
-    const errors = await validate(obj);
+  public async transform(value: any, data: ArgumentMetadata): Promise<void> {
+    const errors = await validate(plainToClass(data.metatype, value));
     if (errors.length) {
-      const messages = errors.map(
-        (error) =>
-          `${error.property} - ${Object.values(error.constraints).join(', ')}`,
-      );
-      throw new ValidationException(messages);
+      throw new ValidationException(this.getErrorMessages(errors));
     }
-
     return value;
+  }
+
+  private getErrorMessages(erorrs: ValidationError[]): string[] {
+    return erorrs.map((error) => this.mapErrorMessage(error));
+  }
+
+  private mapErrorMessage(error: ValidationError): string {
+    return `${error.property} - ${this.parseConstraint(error.constraints)}`;
+  }
+
+  private parseConstraint(constraints: ValidationError['constraints']): string {
+    return Object.values(constraints).join(', ');
   }
 }

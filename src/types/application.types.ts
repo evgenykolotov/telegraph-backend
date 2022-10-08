@@ -9,3 +9,8 @@ export interface TokenPayload {
 export interface RequestWithUser extends Request {
   user?: UserInfoDTO;
 }
+
+export const enum EXPIRES_IN {
+  ONE_HOUR = '1h',
+  THIRTY_DAY = '30d',
+}

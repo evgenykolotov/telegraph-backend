@@ -3,4 +3,5 @@ export const enum EXCEPTION_MESSAGES {
   FOUND_CANDIDATE = 'Пользователь уже существует',
   WRONG_AUTH_DATA = 'Не верный логин или пароль',
   UNAUTHORIZED = 'Пользователь не авторизован',
+  TOKEN_INVALID = 'Токен не валидный',
 }

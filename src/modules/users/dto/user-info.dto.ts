@@ -1,15 +1,6 @@
 import { User } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-/**
- * @class
- * @name UserInfoDTO
- * @classdesc DTO с информацией о пользователе.
- * @property {string} id - Уникальный идентификатор пользователя.
- * @property {string} email - Почтовый адрес пользователя.
- * @property {string} firstName - Имя пользователя.
- * @property {string} lastName - Фамилия пользователя.
- */
 export class UserInfoDTO {
   @ApiProperty({
     example: 'ba94ebd3-2711-4973-8c63-39f85993a2ff',
@@ -26,10 +17,6 @@ export class UserInfoDTO {
   @ApiProperty({ example: 'Kolotov', description: 'Фамилия пользователя' })
   public readonly lastName: User['last_name'];
 
-  /**
-   * @constructor
-   * @param {User} user - Пользователь из БД.
-   */
   constructor(user: User) {
     this.id = user.id;
     this.email = user.email;
